@@ -1,0 +1,13 @@
+.btn-link{
+    color: #000;
+}
+
+.btn-link:hover{
+    background-color: #999;
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-link:focus, .btn-link:active{
+    text-decoration: none;
+}
