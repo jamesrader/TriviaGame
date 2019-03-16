@@ -7,7 +7,3 @@
     color: #fff;
     text-decoration: none;
 }
-
-.btn-link:focus, .btn-link:active{
-    text-decoration: none;
-}
