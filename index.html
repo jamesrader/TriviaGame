@@ -14,17 +14,24 @@
 </head>
 
 <body>
-    <p><select id="dropdown">
-        <option value="" disabled selected>Select a category</option>
-    </select>
-    <button id="startButton">Start!</button></p>
-    <p id="timerArea"></p>
-    <p id="questionArea"></p>
-    <div id="answersArea"></div>
-    <p id="messageArea"></p>
-    <p id="resultsArea"></p>
-    <p id="scoreArea"></p>
-    <video width="400" id="giphyArea" autoplay></video>
+    <div class="container">
+        <div class="jumbotron border border-secondary">
+            <h1 class="display-4 text-warning">Entertainment Trivia</h1>
+            <p class="lead text-primary">This is a 10-question quiz game.  Choose a category and click "Start!" to begin.</p>
+            <p><select id="dropdown">
+                    <option value="" disabled selected>Select a category</option>
+                </select>
+                <button type="button" class="btn btn-primary" id="startButton">Start!</button></p>
+        </div>
+        
+        <p class="text-danger" id="timerArea"></p>
+        <p class="h3" id="questionArea"></p>
+        <div id="answersArea"></div>
+        <p id="messageArea"></p>
+        <p id="resultsArea"></p>
+        <p id="scoreArea"></p>
+        <video width="400" id="giphyArea" autoplay></video>
+    </div>
     <!-- <script src="assets/javascript/questions.js"></script> -->
     <script src="assets/javascript/appV1.js"></script>
     <!-- <script src="assets/javascript/appBackup.js"></script> -->

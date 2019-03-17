@@ -1,9 +1,19 @@
 .btn-link{
-    color: #000;
+    color: #999;
 }
 
 .btn-link:hover{
     background-color: #999;
     color: #fff;
     text-decoration: none;
+}
+
+body {
+    background-image: url("../images/curls.png");
+    margin: 0px;
+    color: #777;
+}
+
+.jumbotron {
+    background-image: url("../images/curlsLight.png");
 }
