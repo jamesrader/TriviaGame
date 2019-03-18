@@ -17,3 +17,7 @@ body {
 .jumbotron {
     background-image: url("../images/curlsLight.png");
 }
+
+.audios {
+    display: none;
+}

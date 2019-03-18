@@ -16,7 +16,7 @@
 <body>
     <div class="container">
         <div class="jumbotron border border-secondary">
-            <h1 class="display-4 text-warning">Entertainment Trivia</h1>
+            <h1 class="display-4 text-warning"><span id="category0">Entertainment Trivia</span><span id="category1"></span></h1>
             <p class="lead text-primary">This is a 10-question quiz game.  Choose a category and click "Start!" to begin.</p>
             <p><select id="dropdown">
                     <option value="" disabled selected>Select a category</option>
@@ -26,15 +26,30 @@
         
         <p class="text-danger" id="timerArea"></p>
         <p class="h3" id="questionArea"></p>
-        <div id="answersArea"></div>
-        <p id="messageArea"></p>
+        <div class="row">
+            <div class="col-sm-4" id="answer1"></div>
+            <div class="col-sm-4" id="answer2"></div>
+        </div>
+        <div class="row">
+                <div class="col-sm-4" id="answer3"></div>
+                <div class="col-sm-4" id="answer4"></div>
+            </div>
+        <p id="messageArea" class="h3"></p>
         <p id="resultsArea"></p>
         <p id="scoreArea"></p>
         <video width="400" id="giphyArea" autoplay></video>
     </div>
-    <!-- <script src="assets/javascript/questions.js"></script> -->
+    <audio class="audios" id="music-audio" controls preload="none"> 
+            <source src="assets/audio/ThinkingEdit.mp3" type="audio/mpeg">
+    </audio>
+    <audio class="audios" id="correct-audio" controls preload="none"> 
+            <source src="assets/audio/Bell1.mp3" type="audio/mpeg">
+    </audio>
+    <audio class="audios" id="wrong-audio" controls preload="none"> 
+            <source src="assets/audio/Buzzer1.mp3" type="audio/mpeg">
+    </audio>
     <script src="assets/javascript/appV1.js"></script>
-    <!-- <script src="assets/javascript/appBackup.js"></script> -->
+    <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
 </body>
 
 </html>
