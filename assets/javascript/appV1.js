@@ -3,7 +3,7 @@ $(document).ready(function () {
     var phrases = ["You weren't really trying, were you?", "Atrocious!", "Abysmal!", "Pathetic!", "Awful!", "Terrible!", "Not bad.", "Pretty good.", "Well done!", "Great job!", "Fantastic! You must be a genius!"]
     var answersText = "";
     var q = -1;
-    var numQuestions = 3;
+    var numQuestions = 10;
     var correct = 0;
     var wrong = 0;
     var timer = 10;
@@ -21,43 +21,54 @@ $(document).ready(function () {
     { category: "Video Games", number: 15 }
     ];
 
-    function enableControls(){
-    //$("#category1").prop("display", "none");
-    $("#startButton").on("click", function () {
-        var categoryNum = $("#dropdown").val();
-        categoryName = $("#dropdown :selected").text();
-        resetGame();
-        getQuestions(categoryNum);
-    })
+    //Setup listeners for start button and dropdown
+    function enableControls() {
+        $("#startButton").on("click", function () {
+            var categoryNum = $("#dropdown").val();
+            categoryName = $("#dropdown :selected").text();
+            resetGame();
+            getQuestions(categoryNum);
+        })
 
-    $("#dropdown").change(function () {
-        $("#startButton").prop("disabled", false);
-    })
-}
+        $("#dropdown").change(function () {
+            $("#startButton").prop("disabled", false);
+        })
+    }
 
+    //Build category list
     for (i = 0; i < categories.length; i++) {
         $('<option/>').val(categories[i].number).text(categories[i].category).appendTo('#dropdown');
     }
 
-    function resetGame(){
-        console.log("HERE!!!");
+
+    function resetGame() {
+
+        //Disable top controls during game
         $("#dropdown").prop("disabled", true);
         $("#startButton").prop("disabled", true);
+        
+        //Reset variables
         q = -1;
         correct = 0;
         wrong = 0;
+        
+        //Empty some divs
+        $("#results-card").hide();
         $("#messageArea").text("");
         $("#resultsArea").text("");
         $("#scoreArea").text("");
         $("#timerArea").html("<h4>Time remaining   <span id='timer'></span></h4>");
+
+        //Start the music
         $("#music-audio").prop("volume", 0.4);
         $('#music-audio').trigger('play');
     }
 
     function getQuestions(catNum) {
-        console.log(catNum);
-        questionsArray=[];
+        questionsArray = [];
         questionNumbers = [];
+
+        //Pick random questions numbers from the 50 which will be returned from the API (make sure there are no dupes)
         for (i = 0; i < numQuestions; i++) {
             var randomNum = Math.floor(Math.random() * 50);
             if (questionNumbers.indexOf(randomNum) > -1) {
@@ -66,45 +77,39 @@ $(document).ready(function () {
                 questionNumbers.push(randomNum);
             }
         }
-        console.log(questionNumbers);
 
+        //Build the API call
         var queryURL = "https://opentdb.com/api.php?amount=50&category=" + catNum + "&difficulty=easy&type=multiple";
 
+        //Make the API call
         $.ajax({
             url: queryURL,
             method: "GET"
         }).then(function (response) {
-            console.log(response);
+            //Populate the array with the questions 
             for (i = 0; i < questionNumbers.length; i++) {
                 questionsArray.push(response.results[questionNumbers[i]]);
             }
-            console.log(questionsArray);
-            var question1 = questionsArray[0].question;
 
-            //Decode HTML Entities
-            console.log($("<textarea/>").html(question1).val());
             quiz();
         });
     }
 
     function quiz() {
-        $("#giphyArea").get(0).pause();
-        $("#giphyArea").attr('src', "");
-        $("#giphyArea").get(0).load();
+
         if (q < (questionsArray.length - 1)) {
             q++;
             timer = 10;
             $("#messageArea").text("");
-            //$("#timerArea").html("You have <span id='timer'>" + timer + "</span> seconds remaining.");
             $("#timer").text(":" + timer.toString());
 
 
-            //Decode HTML Entities
+            //Decode HTML entities and display question
             question = ($("<textarea/>").html(questionsArray[q].question).val());
-            console.log(question);
             $("#questionArea").text((q + 1) + ". " + question);
-            var answersNum = questionsArray[q].incorrect_answers.length + 1;
+
             //Select random order for answers
+            var answersNum = questionsArray[q].incorrect_answers.length + 1;
             answersOrder = [];
             for (r = 0; r < answersNum; r++) {
                 var randomNum = Math.floor(Math.random() * answersNum);
@@ -116,10 +121,9 @@ $(document).ready(function () {
 
             }
 
-            console.log(answersOrder);
-
+            //Display answers...after giving them useful id's to track which is correct
             for (j = 0; j < answersNum; j++) {
-                var k = j+1;
+                var k = j + 1;
                 if (answersOrder[j] == 0) {
                     answersText = ("<button type='button' class='btn btn-link btn-lg' id=" + answersOrder[j] + ">" + letters[j] + ". " + questionsArray[q].correct_answer + "</button>");
                     $("#answer" + k).html(answersText);
@@ -128,115 +132,121 @@ $(document).ready(function () {
                     $("#answer" + k).html(answersText);
                 }
             }
-            //$("#answersArea").html(answersText);
+          
+            //Handler for choosing an answer
             $(".btn").on("click", function (event) {
+
+                //Stop timer and disable answers from being selected
                 clearInterval(interval);
                 $(".btn").off("click");
                 $(".btn").prop("disabled", true);
-                // console.log(event.target.id);
+                
+                //Get id of answer that was clicked
                 chosenAnswer = event.target.id;
-                // console.log(chosenAnswer);
+                
+                //Check if answer is correct (id=0)
                 if (chosenAnswer == 0) {
+
+                    //Play bell sound
                     $('#correct-audio').trigger('play');
-                    console.log("Correct!");
+
+                    //Change look of clicked answer to green outline
                     $("#" + chosenAnswer).removeClass("btn-link");
                     $("#" + chosenAnswer).addClass("btn-outline-success");
-                    $("#messageArea").text("Correct!");
+
+                    //Add notification that the answer is correct and increment correct answer variable
+                    $("#messageArea").html("<span class='correct'>Correct!</span>");
                     correct++;
-                    getGiphy();
+
+                    //Set delay for reading message
                     setTimeout(quiz, 4000);
                 } else {
+
+                    //Play buzzer sound
                     $('#wrong-audio').trigger('play');
+
+                    //Change look of click answer to red outline
                     $("#" + chosenAnswer).removeClass("btn-link");
                     $("#" + chosenAnswer).addClass("btn-outline-danger");
-                    console.log("Wrong!");
-                    //correctIndex = letters.indexOf(questions[i].answer);
-                    console.log(answersOrder);
-                    console.log(answersOrder.indexOf(0));
-                    $("#messageArea").html("Sorry, that's wrong.  The correct answer was:  " + letters[answersOrder.indexOf(0)] + ". " + questionsArray[q].correct_answer);
+                    
+                    //Add notification that the answer is wrong and increment wrong answer variable
+                    $("#messageArea").html("<span class='wrong'>Sorry, that's wrong.</span>  The correct answer was:  " + letters[answersOrder.indexOf(0)] + ". " + questionsArray[q].correct_answer);
                     wrong++;
-                    getGiphy();
+
+                    //Set delay for reading message
                     setTimeout(quiz, 4000);
                 }
             })
-            console.log(answersText);
-
+        
+            //Empty variable for answers
             answersText = "";
+
+            //Timer for countdown
             interval = setInterval(countdown, 1000);
         } else {
+
+            //Dip music for text-to-speech
             $('#music-audio').animate({
                 volume: 0.2
-              }, 1000);
-            console.log("Quiz Complete.");
-            console.log("Correct: " + correct);
-            console.log("Incorrect: " + wrong);
-            $("#messageArea").text("Quiz Complete.");
-            $("#resultsArea").text("Correct: " + correct + "    Incorrect: " + wrong);
+            }, 1000);
+
+            //Empty questions/answers and message
+            $(".quiz-info").html("");
+            $("#messageArea").text("");
+            
+            //Calculate percentage correct and display stats
             var correctPercent = Math.round((correct / (correct + wrong)) * 100);
             var percentText = "Score:  " + correctPercent + "%";
+            $("#results-correct").text("Correct: " + correct);
+            $("#results-wrong").text("Incorrect: " + wrong);
+            $("#results-score").text("Score:  " + correctPercent + "%");
+            $("#restart-message").show();
+            $("#results-card").show();
+
+            //Text-to-speech using API
             speechString = "Quiz complete. Your score was " + correctPercent + " percent.";
-            responsiveVoice.speak(speechString, "UK English Female", {volume: 1}, {rate: 0.5});
-            responsiveVoice.speak(phrases[Math.round(correctPercent / 10)], "UK English Female", {volume: 1}, {rate: 0.5}, {onend: fadeMusic()});
+            responsiveVoice.speak(speechString, "UK English Female", { volume: 1 }, { rate: 0.5 });
+            responsiveVoice.speak(phrases[Math.round(correctPercent / 10)], "UK English Female", { volume: 1 }, { rate: 0.5 });
 
-            
-            function fadeMusic(){
-                $('#music-audio').animate({
-                    volume: 0.0
-                  }, 3000);
-            }
+            //Fade music
+            $('#music-audio').animate({
+                volume: 0.0
+            }, 8000);
 
-            $("#scoreArea").text(percentText);
+            //Re-activate top controls to allow for starting a new game
             $("#dropdown").prop("disabled", false);
             $("#startButton").prop("disabled", false);
 
+            //Re-establish listeners
             enableControls();
-            /* $("#startButton").on("click", function () {
-                var categoryNum = $("#dropdown").val();
-                categoryName = $("#dropdown :selected").text();
-                resetGame();
-                getQuestions(categoryNum);
-            }) */
         }
 
-    };
+    }
 
     function countdown() {
+        
+        //Decrement counter and display it
         timer--;
         $("#timer").text(":0" + timer.toString());
+        
+        //When time runs out, follow all steps for a wrong answer
         if (timer === 0) {
             clearInterval(interval);
             $('#wrong-audio').trigger('play');
             $(".btn").off("click");
             $(".btn").prop("disabled", true);
             console.log("You ran out of time!");
-            $("#messageArea").html("You ran out of time!  The correct answer was:  " + letters[answersOrder.indexOf(0)] + ". " + questionsArray[q].correct_answer);
+            $("#messageArea").html("<span class='wrong'>You ran out of time!</span>  The correct answer was:  " + letters[answersOrder.indexOf(0)] + ". " + questionsArray[q].correct_answer);
             wrong++;
-            getGiphy();
             setTimeout(quiz, 4000);
         };
 
 
-    };
+    }
 
-    function getGiphy() {
-        var search = (questionsArray[q].correct_answer + "+" + categoryName);
-        search = search.replace(/\s/g, "+");
-        console.log(search);
-        var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=gBzC2Ds1djK6WZkC736coM3WamCAziaD&q=" + search + "&limit=1&offset=0&rating=PG&lang=en";
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        }).then(function (response) {
-            console.log(response);
-            var giphy = response.data[0].images.looping.mp4;
-
-            $("#giphyArea").get(0).pause();
-            $("#giphyArea").attr('src', giphy);
-            $("#giphyArea").get(0).load();
-            $("#giphyArea").get(0).play();
-        })
-    };
-
+    //Initialize display and controls to get started
+    $("#results-card").hide();
+    $("#restart-message").hide();
     $("#startButton").prop("disabled", true);
     enableControls();
 

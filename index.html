@@ -9,6 +9,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Armata" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 </head>
@@ -16,37 +17,54 @@
 <body>
     <div class="container">
         <div class="jumbotron border border-secondary">
-            <h1 class="display-4 text-warning"><span id="category0">Entertainment Trivia</span><span id="category1"></span></h1>
-            <p class="lead text-primary">This is a 10-question quiz game.  Choose a category and click "Start!" to begin.</p>
+            <h1 class="display-4 text-warning"><span id="category0">Entertainment Trivia</span></h1><span
+                id="categoryIcon"></span>
+            <p class="lead text-primary">This is a 10-question quiz game. Choose a category and click "Start!" to begin.
+            </p>
             <p><select id="dropdown">
                     <option value="" disabled selected>Select a category</option>
                 </select>
                 <button type="button" class="btn btn-primary" id="startButton">Start!</button></p>
         </div>
-        
-        <p class="text-danger" id="timerArea"></p>
-        <p class="h3" id="questionArea"></p>
-        <div class="row">
-            <div class="col-sm-4" id="answer1"></div>
-            <div class="col-sm-4" id="answer2"></div>
-        </div>
-        <div class="row">
-                <div class="col-sm-4" id="answer3"></div>
-                <div class="col-sm-4" id="answer4"></div>
+        <div class="card border border-secondary" id="results-card">
+            <div class="card-header bg-secondary h2 text-white">Quiz Complete!</div>
+            <div class="card-body">
+                <div class="card-title h3 text-secondary"><u>Results</u></div>
+                <div class="row">
+                    <div class="card-text h4 col-sm-4 text-success" id="results-correct"></div>
+                    <div class="card-text h4 col-sm-4 text-danger" id="results-wrong"></div>
+                </div>
+                <div class="row">
+                    <div class="card-text h4 col-sm-4 text-info" id="results-score"></div>
+                </div>
+                <div class="row">
+                    <div class="card-text h4 col-12 text-secondary" id="restart-message">Try again by using the controls
+                        at the top of the page.</div>
+                </div>
             </div>
-        <p id="messageArea" class="h3"></p>
-        <p id="resultsArea"></p>
-        <p id="scoreArea"></p>
-        <video width="400" id="giphyArea" autoplay></video>
+        </div>
+
+        <p class="text-danger quiz-info" id="timerArea"></p>
+        <p class="h3 quiz-info questionAndAnswers" id="questionArea"></p>
+        <div class="row questionAndAnswers" id="answersArea">
+            <div class="col-sm-4 quiz-info" id="answer1"></div>
+            <div class="col-sm-4 quiz-info" id="answer2"></div>
+        </div>
+        <div class="row questionAndAnswers">
+            <div class="col-sm-4 quiz-info" id="answer3"></div>
+            <div class="col-sm-4 quiz-info" id="answer4"></div>
+        </div>
+        <p id="messageArea"></p>
+        <video height="200" id="giphyArea" autoplay></video>
     </div>
-    <audio class="audios" id="music-audio" controls preload="none"> 
-            <source src="assets/audio/ThinkingEdit.mp3" type="audio/mpeg">
+    <audio class="audios" id="music-audio" controls preload="none">
+        <source src="assets/audio/ThinkingEdit.mp3" type="audio/mpeg">
     </audio>
-    <audio class="audios" id="correct-audio" controls preload="none"> 
-            <source src="assets/audio/Bell1.mp3" type="audio/mpeg">
+    <audio class="audios" id="correct-audio" controls preload="none">
+        <source src="assets/audio/Bell1.mp3" type="audio/mpeg">
     </audio>
-    <audio class="audios" id="wrong-audio" controls preload="none"> 
-            <source src="assets/audio/Buzzer1.mp3" type="audio/mpeg">
+    <audio class="audios" id="wrong-audio" controls preload="none">
+        <source src="assets/audio/Buzzer1.mp3" type="audio/mpeg">
     </audio>
     <script src="assets/javascript/appV1.js"></script>
     <script src='https://code.responsivevoice.org/responsivevoice.js'></script>

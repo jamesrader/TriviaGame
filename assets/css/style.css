@@ -14,10 +14,34 @@ body {
     color: #777;
 }
 
-.jumbotron {
+.questionAndAnswers, #results-card {
+    font-family: 'Armata', sans-serif;
+}
+
+.jumbotron, .card-body {
     background-image: url("../images/curlsLight.png");
 }
 
 .audios {
     display: none;
+}
+
+#messageArea {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.4em;
+}
+#messageArea, #results-score, #giphyArea, #restart-message {
+    margin-top: 10px;
+}
+
+#results-card{
+    width: 50%;
+}
+
+.correct {
+    color: green;
+}
+
+.wrong {
+    color: red;
 }
