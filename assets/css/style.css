@@ -1,5 +1,14 @@
 .btn-link{
     color: #999;
+    text-align: left;
+}
+
+.btn-outline-success {
+    text-align: left;
+}
+
+.btn-outline-danger {
+    text-align: left;
 }
 
 .btn-link:hover{
